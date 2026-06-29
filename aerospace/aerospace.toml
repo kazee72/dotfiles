@@ -1,0 +1,48 @@
+after-login-command = []
+after-startup-command = []
+
+on-focus-changed = [
+  'exec-and-forget /opt/homebrew/bin/sketchybar --trigger front_app_switched',
+]
+
+exec-on-workspace-change = [
+  '/bin/bash', '-c',
+  '/opt/homebrew/bin/sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE',
+]
+
+start-at-login = true
+
+[gaps]
+inner.horizontal = 8
+inner.vertical = 8
+outer.left = 8
+outer.right = 8
+outer.top = 16
+outer.bottom = 8
+
+[mode.main.binding]
+ctrl-alt-left = 'move left'
+ctrl-alt-right = 'move right'
+ctrl-alt-down = 'move down'
+ctrl-alt-up = 'move up'
+
+ctrl-alt-cmd-left = 'focus left'
+ctrl-alt-cmd-right = 'focus right'
+ctrl-alt-cmd-down = 'focus down'
+ctrl-alt-cmd-up = 'focus up'
+
+alt-cmd-1 = 'workspace 1'
+alt-cmd-2 = 'workspace 2'
+alt-cmd-3 = 'workspace 3'
+alt-cmd-4 = 'workspace 4'
+alt-cmd-5 = 'workspace 5'
+
+shift-alt-cmd-1 = 'move-node-to-workspace 1'
+shift-alt-cmd-2 = 'move-node-to-workspace 2'
+shift-alt-cmd-3 = 'move-node-to-workspace 3'
+shift-alt-cmd-4 = 'move-node-to-workspace 4'
+shift-alt-cmd-5 = 'move-node-to-workspace 5'
+
+ctrl-alt-enter = 'fullscreen'
+ctrl-alt-shift-space = 'layout floating tiling'
+ctrl-alt-minus = 'layout tiles horizontal vertical'

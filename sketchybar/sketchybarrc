@@ -1,0 +1,89 @@
+#!/bin/bash
+
+# ── Bar (single, floating, rounded) ────────────────────────────────────────────
+sketchybar --bar \
+  height=34 \
+  position=top \
+  sticky=on \
+  padding_left=4 \
+  padding_right=4 \
+  y_offset=8 \
+  margin=8 \
+  corner_radius=12 \
+  blur_radius=30 \
+  color=0xcc2e3440   # translucent slate — matches the screenshot vibe
+
+# ── Defaults ──────────────────────────────────────────────────────────────────
+sketchybar --default \
+  padding_left=4 \
+  padding_right=4 \
+  icon.font="Hack Nerd Font:Bold:14.0" \
+  label.font="Hack Nerd Font:Regular:13.0" \
+  icon.color=0xffcdd6f4 \
+  label.color=0xffcdd6f4 \
+  icon.padding_left=6 \
+  icon.padding_right=4 \
+  label.padding_left=4 \
+  label.padding_right=6
+
+sketchybar --add event aerospace_workspace_change
+
+# ── Workspaces (left) ─────────────────────────────────────────────────────────
+for sid in 1 2 3 4 5; do
+  sketchybar --add item space.$sid left \
+    --set space.$sid \
+      background.color=0xff313244 \
+      background.corner_radius=5 \
+      background.height=22 \
+      background.drawing=off \
+      icon.font="sketchybar-app-font:Regular:14.0" \
+      icon.drawing=off \
+      label="$sid" \
+      label.font="Hack Nerd Font:Bold:13.0" \
+      label.padding_left=8 \
+      label.padding_right=8 \
+      click_script="aerospace workspace $sid" \
+      script="$HOME/.config/sketchybar/plugins/workspace.sh $sid"
+  sketchybar --subscribe space.$sid aerospace_workspace_change
+done
+
+# ── Focused window name (left) ─────────────────────────────────────────────────
+sketchybar --add item focused_window left \
+  --set focused_window \
+    label.font="Hack Nerd Font:Regular:12.0" \
+    label.color=0xff89b4fa \
+    padding_left=10 \
+    script="$HOME/.config/sketchybar/plugins/focused_window.sh"
+sketchybar --subscribe focused_window aerospace_workspace_change front_app_switched window_focus
+
+# ── Right side (each item its own pill) ────────────────────────────────────────
+PILL=(background.color=0xff313244 background.corner_radius=5 background.height=22 background.drawing=on)
+
+# Time (rightmost)
+sketchybar --add item clock right \
+  --set clock icon="󱑂" update_freq=10 "${PILL[@]}" \
+    script="$HOME/.config/sketchybar/plugins/clock.sh"
+
+# Date
+sketchybar --add item date right \
+  --set date icon="󰃶" update_freq=60 "${PILL[@]}" \
+    script="$HOME/.config/sketchybar/plugins/clock.sh date"
+
+# Network
+sketchybar --add item network right \
+  --set network update_freq=5 "${PILL[@]}" \
+    script="$HOME/.config/sketchybar/plugins/network.sh"
+
+# Battery (leftmost of the right group)
+sketchybar --add item battery right \
+  --set battery update_freq=60 "${PILL[@]}" \
+    script="$HOME/.config/sketchybar/plugins/battery.sh"
+sketchybar --subscribe battery power_source_change system_woke
+
+# Volume (leftmost of the right group)
+sketchybar --add item volume right \
+  --set volume "${PILL[@]}" \
+    script="$HOME/.config/sketchybar/plugins/volume.sh"
+sketchybar --subscribe volume volume_change
+
+sketchybar --update
